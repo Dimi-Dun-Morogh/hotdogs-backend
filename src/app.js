@@ -4,13 +4,16 @@ const cors = require('cors');
 
 const app = express();
 const http = require('http').createServer(app);
+const ROUTES = require('./routes/index');
+const { initTable } = require('./db/index');
 
 const PORT = process.env.PORT || 3003;
 app.use(cors());
 
 app.use(express.json()); // activate middleware to parse JSON
 
-const { initTable } = require('./db/index');
+//* ROUTES
+Object.entries(ROUTES).forEach(([path, route]) => app.use(path, route));
 
 http.listen(PORT, () => {
   console.log(`SERVER UP AND RUNNING PORT: ${PORT}`);
