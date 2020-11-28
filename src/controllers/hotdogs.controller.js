@@ -43,9 +43,30 @@ const deleteHotdog = async (id) => {
   }
 };
 
+const populateDb = async (mock) => {
+  try {
+    const promises = [];
+    for (let i = 0; i < mock.length; i += 1) {
+      const delay = 500 * i;
+      promises.push(
+        new Promise(async function (resolve) {
+          await new Promise((res) => setTimeout(res, delay));
+          const result = await createHotdog(mock[i]);
+          resolve(result);
+        }),
+      );
+    }
+    await Promise.all(promises);
+    return true;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 module.exports = {
   getAllHotdogs,
   createHotdog,
   updateHotdog,
   deleteHotdog,
+  populateDb,
 };
